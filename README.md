@@ -19,3 +19,9 @@ chmod +x proxygen.sh
 ```
 
 Available resolution formats: 720p, 1080p, 4K
+
+### Requirements
+FFMPEG, pv
+
+(Mac users: brew install ffmpeg pv)
+
