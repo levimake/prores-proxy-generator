@@ -4,7 +4,6 @@
 # ===========
 #
 # proxy_watermark.png needs to be in the same directory as the script
-# download from here: http://whoismatt.com/images/2016/7-july/adobe_proxy_logo.png
 #
 # on OSX, both pv and ffmpeg will need to be installed via homebrew
 
