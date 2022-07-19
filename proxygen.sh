@@ -66,6 +66,9 @@ echo "outputres = $outputres"
 #BATCH_RUN THROUGH ALL MOVS IN THERE
 for inputfile in *.MOV; do
 
+#re-initialize output resolution
+outputres="$x:$y"
+
 nakedname="${inputfile%.*}"
 ext="${inputfile##*.}"
 #outputfile="$1/Proxies/${nakedname}-proxy.${ext}" 
@@ -79,15 +82,55 @@ echo "outputfile = $outputfile"
 eval $(ffprobe -v error -of flat=s=_ -select_streams v:0 -show_entries stream=height,width $inputfile)
 inputres=${streams_stream_0_width}:${streams_stream_0_height}
 
-#TODO: make this 1024:540 if source is C4K
+#ADJUSTMENTS FOR C4K, 4:3 and 3:2 inputs
 
-if [ "$inputres" = "4096:2160" ]
+if [ "$inputres" = "4096:2160" ] #C4K
   then
-    outputres="1024:540"
+    if [ $y -eq 720 ] 
+      then 
+        outputres="1024:540" 
+    fi 
+    if [ $y -eq 1080 ] 
+      then 
+        outputres="1920:1010" 
+    fi
+    if [ $y -eq 2160 ] 
+      then 
+        outputres="4096:2160" 
+    fi
 else
+    #4:3
     if [ "$inputres" = "3328:2496" ]
 	    then
-	      outputres="960:720"
+        if [ $y -eq 720 ] 
+          then 
+            outputres="960:720" 
+        fi
+        if [ $y -eq 1080 ] 
+          then 
+            outputres="1440:1080" 
+        fi
+        if [ $y -eq 2160 ] 
+          then 
+            outputres="2880:2160" 
+        fi
+    else
+      #14:9
+      if [ "$inputres" = "5952:3968" ]
+        then
+          if [ $y -eq 720 ] 
+            then 
+              outputres="1120:720" 
+          fi 
+          if [ $y -eq 1080 ] 
+            then 
+              outputres="1680:1080" 
+          fi
+          if [ $y -eq 2160 ] 
+            then 
+              outputres="3360:2160" 
+          fi
+      fi
     fi
 fi 
 
